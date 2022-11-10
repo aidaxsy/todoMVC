@@ -286,3 +286,48 @@ window.onhashchange = function(){
 }
 ```
 > 切换对应的任务显示
+```html
+<!-- 如果某一项是编辑状态，可以添加editing类名-->
+<li v-for="task in tasks" 
+:class="{completed:task.completed,editing:isEditing==task.id}"
+v-if="show(task.completed)"
+>
+```
+```js
+methods:{
+    show(i){
+        if(this.flag===""){
+            return true;
+        }else if(this.flag.completed===i){
+            return true;
+        }
+    }
+}
+```
+
+### 十五 双击编辑自动聚焦
+```html
+<input class="edit" v-model="task.title"
+    @keyup.enter="isEditing=-1"
+    @blur="isEditing=-1"
+    v-todo-focus="isEditing==task.id"							
+>
+<!-- 如果isEditing==task.id为true,就让input自动聚焦 -->
+```
+```js
+directives:{
+    "todo-focus":function(el,binding){
+        if(binding.value){
+            el.focus()
+        }
+    }
+}
+```
+
+### bug修复
+> 首次输入hash不能显示对应任务bug解决方案
+```js
+data:{
+	flag:location.hash=="#/active"?({completed:false}):(location.hash=="#/completed"?({completed:true}):"")
+}
+```
